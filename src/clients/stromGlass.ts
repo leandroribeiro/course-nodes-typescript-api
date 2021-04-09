@@ -1,8 +1,8 @@
 import { AxiosStatic } from "axios";
 
 export interface StormGlassPointSource {
-    [key: string]: number;
-    //noaa: number;
+    //[key: string]: number;
+    noaa: number;
 }
 
 export interface StormGlassPoint {
@@ -12,7 +12,7 @@ export interface StormGlassPoint {
     readonly swellDirection: StormGlassPointSource;
     readonly swellHeight: StormGlassPointSource;
     readonly swellPeriod: StormGlassPointSource;
-    readonly windDirecion: StormGlassPointSource;
+    readonly windDirection: StormGlassPointSource;
     readonly windSpeed: StormGlassPointSource;
 }
 
@@ -27,7 +27,7 @@ export interface ForecastPoint {
     swellDirection: number;
     swellHeight: number;
     swellPeriod: number;
-    windDirecion: number;
+    windDirection: number;
     windSpeed: number;
 }
 
@@ -54,7 +54,7 @@ export class StromGlass {
                 time: point.time,
                 waveDirection: point.waveDirection[this.stromGlassAPISource],
                 waveHeight: point.waveHeight[this.stromGlassAPISource],
-                windDirecion: point.windDirecion[this.stromGlassAPISource],
+                windDirection: point.windDirection[this.stromGlassAPISource],
                 windSpeed: point.windSpeed[this.stromGlassAPISource],
             }));
     }
@@ -66,7 +66,7 @@ export class StromGlass {
             point.swellPeriod?.[this.stromGlassAPISource] &&
             point.waveDirection?.[this.stromGlassAPISource] &&
             point.waveHeight?.[this.stromGlassAPISource] &&
-            point.windDirecion?.[this.stromGlassAPISource] &&
+            point.windDirection?.[this.stromGlassAPISource] &&
             point.windSpeed?.[this.stromGlassAPISource]);
     }
 }
