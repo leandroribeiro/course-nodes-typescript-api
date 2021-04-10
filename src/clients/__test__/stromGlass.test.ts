@@ -1,4 +1,4 @@
-import { StromGlass } from '@src/clients/stromGlass';
+import { StormGlass } from '@src/clients/stormGlass';
 import * as stromGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json';
 import stromGlassNormalizedHoursFixture from '@test/fixtures/stormglass_normalized_response_3_hours.json';
 import * as HTTPUtil from '@src/util/request';
@@ -21,7 +21,7 @@ describe('StromGlass client', () => {
       data: stromGlassWeather3HoursFixture,
     } as HTTPUtil.Response);
 
-    const stromGlass = new StromGlass(mockedRequest);
+    const stromGlass = new StormGlass(mockedRequest);
     const response = await stromGlass.fetchPoints(lat, lng);
 
     //    expect([0,0,0]).toBe([0, 0, 0]);
@@ -46,7 +46,7 @@ describe('StromGlass client', () => {
 
     mockedRequest.get.mockResolvedValue({ data: incompleteResponse } as HTTPUtil.Response);
 
-    const stromGlass = new StromGlass(mockedRequest);
+    const stromGlass = new StormGlass(mockedRequest);
     const response = await stromGlass.fetchPoints(lat, lng);
 
     expect(response).toStrictEqual([]);
@@ -58,7 +58,7 @@ describe('StromGlass client', () => {
     const lng = 151.289824;
     mockedRequest.get.mockRejectedValue(new Error('Network Error'));
 
-    const stromGlass = new StromGlass(mockedRequest);
+    const stromGlass = new StormGlass(mockedRequest);
 
     await expect(stromGlass.fetchPoints(lat, lng)).rejects.toThrow(
       'Unexpected error when trying to communicate to StormGlass: Network Error'
@@ -80,7 +80,7 @@ describe('StromGlass client', () => {
       },
     } as unknown as HTTPUtil.Response);
 
-    const stromGlass = new StromGlass(mockedRequest);
+    const stromGlass = new StormGlass(mockedRequest);
 
     await expect(stromGlass.fetchPoints(lat, lng)).rejects.toThrow(
       'Unexpected error returned by the StormGlass service: Error: {"errors":["Rate Limit reached"]} Code: 429'
