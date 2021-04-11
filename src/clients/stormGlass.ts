@@ -1,6 +1,6 @@
 import { InternalError } from '@src/util/erros/internal-error';
 import * as HTTPUtil from '@src/util/request';
-import config, { IConfig } from 'config'
+import config, { IConfig } from 'config';
 
 export interface StormGlassPointSource {
   //[key: string]: number;
@@ -48,7 +48,9 @@ export class StormGlassResponseError extends InternalError {
   }
 }
 
-const stormGlassResourceConfig: IConfig = config.get('App.resources.StormGlass');
+const stormGlassResourceConfig: IConfig = config.get(
+  'App.resources.StormGlass'
+);
 
 export class StormGlass {
   readonly stormGlassAPIParams =
@@ -60,7 +62,11 @@ export class StormGlass {
   public async fetchPoints(lat: number, lng: number): Promise<ForecastPoint[]> {
     try {
       const response = await this.request.get<StormGlassForecastResponse>(
-        `${stormGlassResourceConfig.get('apiUrl')}/weather/point?params=${this.stormGlassAPIParams}&source=${this.stromGlassAPISource}&end=1592113802&lat=${lat}&lng=${lng}}`,
+        `${stormGlassResourceConfig.get('apiUrl')}/weather/point?params=${
+          this.stormGlassAPIParams
+        }&source=${
+          this.stromGlassAPISource
+        }&end=1592113802&lat=${lat}&lng=${lng}}`,
         {
           headers: {
             Authorization: stormGlassResourceConfig.get('apiToken'),
@@ -69,9 +75,7 @@ export class StormGlass {
       );
 
       return this.normalizeResponse(response.data);
-
     } catch (err) {
-
       if (HTTPUtil.Request.isRequestError(err))
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${

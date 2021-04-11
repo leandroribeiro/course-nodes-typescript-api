@@ -25,7 +25,7 @@ export class SetupServer extends Server {
     this.addControllers(forecastController);
   }
 
-  private async databaseSetup(): Promise<void>{
+  private async databaseSetup(): Promise<void> {
     await database.connect();
   }
 
