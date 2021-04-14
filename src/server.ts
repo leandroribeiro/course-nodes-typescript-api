@@ -2,9 +2,10 @@ import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import bodyParser from 'body-parser';
 import { ForecastController } from './controllers/forecast';
-import { Application } from 'express';
+import express, { Application } from 'express';
 import * as database from '@src/database';
 import * as http from 'http';
+import { BeachesController } from './controllers/beaches';
 
 export class SetupServer extends Server {
   private server?: http.Server;
@@ -15,22 +16,27 @@ export class SetupServer extends Server {
 
   public async init(): Promise<void> {
     this.setupExpress();
-    this.setupController();
+    this.setupControllers();
     await this.databaseSetup();
   }
 
   private setupExpress(): void {
-    this.app.use(bodyParser.json());
+    this.app.use(express.json());
   }
 
-  private setupController(): void {
+  private setupControllers(): void {
     const forecastController = new ForecastController();
+    const beachesController = new BeachesController();
 
-    this.addControllers([forecastController]);
+    this.addControllers([forecastController, beachesController]);
   }
 
   private async databaseSetup(): Promise<void> {
-    await database.connect();
+    try {
+      await database.connect();
+    } catch {
+      throw new Error(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
+    }
   }
 
   public async close(): Promise<void> {
