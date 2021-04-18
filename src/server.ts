@@ -8,7 +8,6 @@ import * as http from 'http';
 import { BeachesController } from './controllers/beaches';
 
 export class SetupServer extends Server {
-  private server?: http.Server;
 
   constructor(private port = 3000) {
     super();
@@ -48,8 +47,8 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
-    this.server = this.app.listen(this.port, () => {
-      console.log('Server listening on port: ' + this.port);
+    this.app.listen(this.port, () => {
+      console.info('Server listening on port: ' + this.port);
     });
   }
 }

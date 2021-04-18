@@ -66,7 +66,7 @@ export class StormGlass {
           this.stormGlassAPIParams
         }&source=${
           this.stromGlassAPISource
-        }&end=1592113802&lat=${lat}&lng=${lng}}`,
+        }&end=1592113802&lat=${lat}&lng=${lng}`,
         {
           headers: {
             Authorization: stormGlassResourceConfig.get('apiToken'),
@@ -76,6 +76,7 @@ export class StormGlass {
 
       return this.normalizeResponse(response.data);
     } catch (err) {
+      console.error(err);
       if (HTTPUtil.Request.isRequestError(err))
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${
