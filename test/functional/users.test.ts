@@ -3,7 +3,7 @@ import AuthService from "@src/services/auth";
 
 describe('Users functional tests', () => {
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         await User.deleteMany({});
     })
 
@@ -26,7 +26,7 @@ describe('Users functional tests', () => {
 
         it('Should return 422 when there is a validation error', async () => {
             const newUser = {
-                email: 'paul@mail.com',
+                email: 'john@mail.com',
                 password: '1234',
             };
 
@@ -45,12 +45,53 @@ describe('Users functional tests', () => {
                 password: '1234',
             };
 
+            await global.testRequest.post('/users').send(newUser);
             const response = await global.testRequest.post('/users').send(newUser);
+
             expect(response.status).toBe(409);
             expect(response.body).toEqual({
                 code: 409,
                 error: 'User validation failed: email: already exists in the database'
             });
+        })
+
+    })
+
+    describe('When authentication a user', () => {
+        it('should generate a token for a valid user', async ()=>{
+            // ARRANGE
+            const newUser = {
+                name: 'John Doe',
+                email: 'john@mail.com',
+                password: '1234',
+            };
+            await new User(newUser).save();
+
+            // ACT
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({ email: newUser.email, password: newUser.password});
+
+            // ASSERT
+            expect(response.body).toEqual(
+                expect.objectContaining({token: expect.any(String)})
+            );
+        })
+
+        it('should return UNAUTHORIZED if the user with the given email is not found', async () =>{
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({ email: 'notexist@mail.com', password: '1234'});
+
+            expect(response.status).toBe(401);
+        })
+
+        it('should return UNAUTHORIZED if the user with the given password is wrong', async () =>{
+            const response = await global.testRequest
+                .post('/users/authenticate')
+                .send({ email: 'john@mail.com', password: 'blablabla'});
+
+            expect(response.status).toBe(401);
         })
 
     })
