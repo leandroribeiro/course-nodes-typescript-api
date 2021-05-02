@@ -35,8 +35,9 @@ export class SetupServer extends Server {
   private async databaseSetup(): Promise<void> {
     try {
       await database.connect();
-    } catch {
-      throw new Error(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
+    } catch (error) {
+      console.error(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
+      console.error(error);
     }
   }
 
