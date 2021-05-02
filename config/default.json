@@ -1,18 +1,22 @@
 {
-    "App": {
-        "port": 3000,
-        "database": {
-            "mongoUrl": "mongodb://mongo_leandro-nosql:27017/leandro-nosql"
-        },
-        "auth": {
-            "key": "some-key",
-            "tokenExpiresIn": "10000"
-        },
-        "resources": {
-            "StormGlass": {
-                "apiUrl": "https://api.stormglass.io/v2",
-                "apiToken": "TOKEN_HERE........"
-            }
-        }
+  "App": {
+    "port": 3000,
+    "database": {
+      "mongoUrl": "mongodb://mongo_leandro-nosql:27017/leandro-nosql"
+    },
+    "auth": {
+      "key": "some-key",
+      "tokenExpiresIn": "10000"
+    },
+    "resources": {
+      "StormGlass": {
+        "apiUrl": "https://api.stormglass.io/v2",
+        "apiToken": "TOKEN_HERE........"
+      }
+    },
+    "logger": {
+      "enabled": "true",
+      "level": "info"
     }
+  }
 }
