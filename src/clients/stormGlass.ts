@@ -1,6 +1,7 @@
 import { InternalError } from '@src/util/erros/internal-error';
 import * as HTTPUtil from '@src/util/request';
 import config, { IConfig } from 'config';
+import logger from "@src/logger";
 
 export interface StormGlassPointSource {
   //[key: string]: number;
@@ -76,7 +77,7 @@ export class StormGlass {
 
       return this.normalizeResponse(response.data);
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       if (HTTPUtil.Request.isRequestError(err))
         throw new StormGlassResponseError(
           `Error: ${JSON.stringify(err.response.data)} Code: ${

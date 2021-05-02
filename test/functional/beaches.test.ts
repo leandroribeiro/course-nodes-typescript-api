@@ -1,7 +1,7 @@
 import {Beach} from "@src/models/beach";
 import {beforeEach} from "@jest/globals";
-import {User} from "../../src/models/user";
-import AuthService from "../../src/services/auth";
+import {User} from "@src/models/user";
+import AuthService from "@src/services/auth";
 
 describe('Beaches funcional tests', () => {
     const defaultUser = {

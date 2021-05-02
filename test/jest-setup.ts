@@ -1,5 +1,6 @@
 import { SetupServer } from '@src/server';
 import supertest from 'supertest';
+import config from "config";
 
 let server: SetupServer;
 beforeAll(async () => {

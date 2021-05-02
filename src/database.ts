@@ -3,7 +3,7 @@ import mongoose, { Mongoose } from 'mongoose';
 
 const dbConfig: IConfig = config.get('App.database');
 
-export const connect2 = async (connection: string): Promise<Mongoose> =>
+export const connectBy = async (connection: string): Promise<Mongoose> =>
     await mongoose.connect(connection, {
         useCreateIndex: true,
         useNewUrlParser: true,

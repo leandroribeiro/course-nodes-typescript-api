@@ -1,10 +1,8 @@
 import './util/module-alias';
 import { Server } from '@overnightjs/core';
-import bodyParser from 'body-parser';
 import { ForecastController } from './controllers/forecast';
 import express, { Application } from 'express';
 import * as database from '@src/database';
-import * as http from 'http';
 import { BeachesController } from './controllers/beaches';
 import {UsersController} from "./controllers/users";
 import logger from "@src/logger";
@@ -37,8 +35,8 @@ export class SetupServer extends Server {
     try {
       await database.connect();
     } catch (error) {
-      console.error(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
-      console.error(error);
+      logger.info(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
+      logger.error(error);
     }
   }
 
