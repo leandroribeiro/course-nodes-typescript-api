@@ -3,7 +3,7 @@
   <h1 align="center">Node.js API Course</h1>
 </p>
 
-Source code made during course Node.js API by Waldemar Neto [Youtube Channel](https://www.youtube.com/channel/UCqmJGTdcMIRXOZuukHZ8TqA)
+Source code made during course *"Do Zero A Produção: Aprenda A Construir Uma Api Node.js Com Typescript By Waldemar Neto"* [Click to Go!](https://www.youtube.com/playlist?list=PLz_YTBuxtxt6_Zf1h-qzNsvVt46H8ziKh)
 
 # Technologies
 

@@ -2,13 +2,14 @@ import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import { ForecastController } from './controllers/forecast';
 import express, { Application } from 'express';
+import expressPino from 'express-pino-logger';
+import cors from 'cors';
 import * as database from '@src/database';
 import { BeachesController } from './controllers/beaches';
-import {UsersController} from "./controllers/users";
-import logger from "@src/logger";
+import { UsersController } from './controllers/users';
+import logger from '@src/logger';
 
 export class SetupServer extends Server {
-
   constructor(private port = 3000) {
     super();
   }
@@ -21,6 +22,14 @@ export class SetupServer extends Server {
 
   private setupExpress(): void {
     this.app.use(express.json());
+    this.app.use(
+      expressPino({
+        logger,
+      })
+    );
+    this.app.use(cors({
+      origin: '*'
+    }))
   }
 
   private setupControllers(): void {
@@ -28,7 +37,11 @@ export class SetupServer extends Server {
     const beachesController = new BeachesController();
     const usersController = new UsersController();
 
-    this.addControllers([forecastController, beachesController, usersController]);
+    this.addControllers([
+      forecastController,
+      beachesController,
+      usersController,
+    ]);
   }
 
   private async databaseSetup(): Promise<void> {
@@ -37,6 +50,7 @@ export class SetupServer extends Server {
     } catch (error) {
       logger.info(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
       logger.error(error);
+      throw error;
     }
   }
 
