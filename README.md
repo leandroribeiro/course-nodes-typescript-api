@@ -11,8 +11,9 @@ Source code made during course *"Do Zero A Produção: Aprenda A Construir Uma A
 - Typescript
 - Jest
 
-
 <p align="center">
     <h2 align="center">Keep calm<br/>
     this repository is in progress ....</h2>
 </p>
+
+![70%](https://progress-bar.dev/70)
