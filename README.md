@@ -16,4 +16,4 @@ Source code made during course *"Do Zero A Produção: Aprenda A Construir Uma A
     this repository is in progress ....</h2>
 </p>
 
-![70%](https://progress-bar.dev/70)
+![79%](https://progress-bar.dev/79)

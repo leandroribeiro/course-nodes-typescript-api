@@ -1,4 +1,5 @@
-import { Beach, BeachPosition } from '@src/models/beach';
+import { Beach, GeoPosition } from '@src/models/beach';
+import { ForecastPoint } from '@src/clients/stormGlass';
 
 const WaveHeights = {
   ankleToKnee: {
@@ -19,8 +20,8 @@ export class Rating {
   constructor(private beach: Beach) {}
 
   public getRatingBasedOnWindAndWavePositions(
-    wavePosition: BeachPosition,
-    windPosition: BeachPosition
+    wavePosition: GeoPosition,
+    windPosition: GeoPosition
   ): number {
     if (wavePosition == windPosition) return 1;
     else if (this.isWindOffshore(wavePosition, windPosition)) return 5;
@@ -28,8 +29,8 @@ export class Rating {
   }
 
   private isWindOffshore(
-    waveDirection: BeachPosition,
-    windDirection: BeachPosition
+    waveDirection: GeoPosition,
+    windDirection: GeoPosition
   ) {
     // return (
     //   (waveDirection === BeachPosition.N &&
@@ -91,23 +92,37 @@ export class Rating {
     return 1;
   }
 
-  public getPositionFromLocation(coordinates: number): BeachPosition {
+  public getPositionFromLocation(coordinates: number): GeoPosition {
     if (coordinates >= 310 || (coordinates < 50 && coordinates >= 0)) {
-      return BeachPosition.N;
+      return GeoPosition.N;
     }
 
     if (coordinates >= 50 && coordinates < 120) {
-      return BeachPosition.E;
+      return GeoPosition.E;
     }
 
     if (coordinates >= 120 && coordinates < 220) {
-      return BeachPosition.S;
+      return GeoPosition.S;
     }
 
     if (coordinates >= 220 && coordinates < 310) {
-      return BeachPosition.W;
+      return GeoPosition.W;
     }
 
-    return BeachPosition.E;
+    return GeoPosition.E;
+  }
+
+  public getRateForPoint(point: ForecastPoint): number {
+    const swellDirection = this.getPositionFromLocation(point.swellDirection);
+    const windDirection = this.getPositionFromLocation(point.windDirection);
+    
+    const windAndWaveRating = this.getRatingBasedOnWindAndWavePositions(
+      swellDirection,
+      windDirection
+    );
+    const swellHeightRating = this.getRatingForSwellSize(point.swellHeight);
+    const swellPeriodRating = this.getRatingForSwellPeriod(point.swellPeriod);
+
+    return Math.round((windAndWaveRating + swellHeightRating + swellPeriodRating) / 3);
   }
 }
