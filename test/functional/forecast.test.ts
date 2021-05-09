@@ -1,7 +1,7 @@
 import { Beach, BeachPosition } from '@src/models/beach';
 import nock from 'nock';
-import stormGlassWeather3HoursFixture from '@test/fixtures/stormglass_weather_3_hours.json';
-import apiResponse1Beach from '@test/fixtures/api_forecast_response_1_beach.json';
+import stormGlassWeather3HoursFixture from '../fixtures/stormglass_weather_3_hours.json';
+import apiForecastResponse1BeachFixture from '../fixtures/api_forecast_response_1_beach.json';
 import { User } from '@src/models/user';
 import AuthService from '@src/services/auth';
 
@@ -40,10 +40,11 @@ describe('Beach forecast functional tests', () => {
       .defaultReplyHeaders({ 'access-control-allow-origin': '*' })
       .get('/v2/weather/point')
       .query({
-        params: '/(.*/',
-        source: 'noaa',
         lat: '-33.792726',
         lng: '151.289824',
+        params: /(.*)/, //'swellDirection,swellHeight,swellPeriod,waveDirection,waveHeight,windDirection,windSpeed'
+        source: 'noaa',
+        end: /(.*)/,
       })
       .reply(200, stormGlassWeather3HoursFixture);
 
@@ -52,7 +53,7 @@ describe('Beach forecast functional tests', () => {
       .set({ 'x-access-token': token });
 
     expect(status).toBe(200);
-    expect(body).toEqual(apiResponse1Beach);
+    expect(body).toEqual(apiForecastResponse1BeachFixture);
   });
 
   it('should return 500 if something goes wrong during the processing', async () => {
