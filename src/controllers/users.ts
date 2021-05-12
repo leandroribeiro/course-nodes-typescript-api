@@ -4,6 +4,7 @@ import { Request, Response } from 'express';
 import { BaseController } from '@src/controllers/index';
 import AuthService from '@src/services/auth';
 import { authMiddleware } from '@src/middlewares/auth';
+import logger from '@src/logger';
 
 @Controller('users')
 export class UsersController extends BaseController {
@@ -14,6 +15,7 @@ export class UsersController extends BaseController {
       const newUser = await user.save();
       res.status(201).send(newUser);
     } catch (e) {
+      logger.error(e);
       this.sendCreateUpdateErrorResponse(res, e);
     }
   }

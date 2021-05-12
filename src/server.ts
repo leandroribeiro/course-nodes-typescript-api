@@ -5,9 +5,15 @@ import express, { Application } from 'express';
 import expressPino from 'express-pino-logger';
 import cors from 'cors';
 import * as database from '@src/database';
-import { BeachesController } from './controllers/beaches';
-import { UsersController } from './controllers/users';
+import { BeachesController } from '@src/controllers/beaches';
+import { UsersController } from '@src/controllers/users';
 import logger from '@src/logger';
+import swaggerUi from 'swagger-ui-express';
+import apiSchema from './api.schema.json';
+import * as OpenApiValidator from 'express-openapi-validator';
+import OpenAPIV3 from 'express-openapi-validator/dist/framework/types';
+import path from 'path';
+import { apiErrorValidator } from '@src/middlewares/api-error-validator';
 
 export class SetupServer extends Server {
   constructor(private port = 3000) {
@@ -16,8 +22,10 @@ export class SetupServer extends Server {
 
   public async init(): Promise<void> {
     this.setupExpress();
+    await this.docSetup();
     this.setupControllers();
     await this.databaseSetup();
+    this.setupErrorHandlers();
   }
 
   private setupExpress(): void {
@@ -27,9 +35,15 @@ export class SetupServer extends Server {
         logger,
       })
     );
-    this.app.use(cors({
-      origin: '*'
-    }))
+    this.app.use(
+      cors({
+        origin: '*',
+      })
+    );
+  }
+
+  private setupErrorHandlers(): void {
+    this.app.use(apiErrorValidator);
   }
 
   private setupControllers(): void {
@@ -48,7 +62,9 @@ export class SetupServer extends Server {
     try {
       await database.connect();
     } catch (error) {
-      logger.info(' >>>>>>>>>>>> ERROR TO CONNECT DATABASE !!!');
+      logger.info(
+        ' <<<<<<<<<<<<<<<< ERROR TO CONNECT DATABASE >>>>>>>>>>>>>>>'
+      );
       logger.error(error);
       throw error;
     }
@@ -56,6 +72,25 @@ export class SetupServer extends Server {
 
   public async close(): Promise<void> {
     await database.close();
+  }
+
+  private async docSetup(): Promise<void> {
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
+    // 4.xx version
+    this.app.use(
+      OpenApiValidator.middleware({
+        apiSpec: path.join(__dirname, 'api.schema.json'),
+        validateRequests: true,
+        validateResponses: true,
+      })
+    );
+
+    // 3.xx version
+    // await new OpenApiValidator({
+    //   apiSpec: apiSchema,
+    //   validateRequest: true,
+    //   validateResponse: true,
+    // }).install(this.app);
   }
 
   public getApp(): Application {
