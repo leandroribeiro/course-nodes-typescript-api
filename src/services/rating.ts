@@ -53,69 +53,37 @@ export class Rating {
   }
 
   public getRatingForSwellPeriod(period: number): number {
-    if (period >= 7 && period < 10) {
-      return 2;
-    }
+    if (period < 7) return 1;
+    if (period < 10) return 2;
+    if (period < 14) return 4;
 
-    if (period >= 10 && period < 14) {
-      return 4;
-    }
-    if (period >= 14) {
-      return 5;
-    }
-
-    return 1;
+    return 5;
 
     // const rating = [1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 4, 4, 4, 4, 5];
     // return rating[period > 14 ? 14 : period];
   }
 
   public getRatingForSwellSize(height: number): number {
-    if (
-      height >= WaveHeights.ankleToKnee.min &&
-      height < WaveHeights.ankleToKnee.max
-    ) {
-      return 2;
-    }
+    if (height < WaveHeights.ankleToKnee.min) return 1;
+    if (height < WaveHeights.ankleToKnee.max) return 2;
+    if (height < WaveHeights.waistHigh.max) return 3;
 
-    if (
-      height >= WaveHeights.waistHigh.min &&
-      height < WaveHeights.waistHigh.max
-    ) {
-      return 3;
-    }
-
-    if (height >= WaveHeights.headHigh.min) {
-      return 5;
-    }
-
-    return 1;
+    return 5;
   }
 
   public getPositionFromLocation(coordinates: number): GeoPosition {
-    if (coordinates >= 310 || (coordinates < 50 && coordinates >= 0)) {
-      return GeoPosition.N;
-    }
+    if (coordinates < 50) return GeoPosition.N;
+    if (coordinates < 120) return GeoPosition.E;
+    if (coordinates < 220) return GeoPosition.S;
+    if (coordinates < 310) return GeoPosition.W;
 
-    if (coordinates >= 50 && coordinates < 120) {
-      return GeoPosition.E;
-    }
-
-    if (coordinates >= 120 && coordinates < 220) {
-      return GeoPosition.S;
-    }
-
-    if (coordinates >= 220 && coordinates < 310) {
-      return GeoPosition.W;
-    }
-
-    return GeoPosition.E;
+    return GeoPosition.N;
   }
 
   public getRateForPoint(point: ForecastPoint): number {
     const swellDirection = this.getPositionFromLocation(point.swellDirection);
     const windDirection = this.getPositionFromLocation(point.windDirection);
-    
+
     const windAndWaveRating = this.getRatingBasedOnWindAndWavePositions(
       swellDirection,
       windDirection
@@ -123,6 +91,8 @@ export class Rating {
     const swellHeightRating = this.getRatingForSwellSize(point.swellHeight);
     const swellPeriodRating = this.getRatingForSwellPeriod(point.swellPeriod);
 
-    return Math.round((windAndWaveRating + swellHeightRating + swellPeriodRating) / 3);
+    return Math.round(
+      (windAndWaveRating + swellHeightRating + swellPeriodRating) / 3
+    );
   }
 }

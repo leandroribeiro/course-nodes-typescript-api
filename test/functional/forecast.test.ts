@@ -18,12 +18,12 @@ describe('Beach forecast functional tests', () => {
     await User.deleteMany({});
     const user = await new User(defaultUser).save();
 
-    const defaultBeach = {
+    const defaultBeach: Beach = {
       lat: -33.792726,
       lng: 151.289824,
       name: 'Manly',
       position: GeoPosition.E,
-      user: user.id,
+      userId: user.id,
     };
 
     await new Beach(defaultBeach).save();
