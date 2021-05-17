@@ -22,4 +22,4 @@ STORM_GLASS_API_TOKEN=<PUT_HERE_YOUR_API_TOKEN> yarn start
     this repository is in progress ....</h2>
 </p>
 
-![93%](https://progress-bar.dev/93)
+![95%](https://progress-bar.dev/95)
