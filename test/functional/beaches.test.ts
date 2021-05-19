@@ -1,6 +1,6 @@
-import {Beach} from "@src/models/beach";
-import {beforeEach} from "@jest/globals";
-import {User} from "@src/models/user";
+import { Beach } from "@src/models/beach";
+import { beforeEach } from "@jest/globals";
+import { User } from "@src/models/user";
 import AuthService from "@src/services/auth";
 
 describe('Beaches funcional tests', () => {
@@ -29,7 +29,7 @@ describe('Beaches funcional tests', () => {
 
             const response = await global.testRequest
                 .post('/beaches')
-                .set({'x-access-token': token})
+                .set({ 'x-access-token': token })
                 .send(newBeach);
 
             expect(response.status).toBe(201);
@@ -46,7 +46,7 @@ describe('Beaches funcional tests', () => {
 
             const response = await global.testRequest
                 .post('/beaches')
-                .set({'x-access-token': token})
+                .set({ 'x-access-token': token })
                 .send(newBeach);
             expect(response.status).toBe(400);
             expect(response.body).toEqual({
@@ -57,8 +57,27 @@ describe('Beaches funcional tests', () => {
         });
     });
 
-    it.skip('should return 500 when there is any error other than validation error', async () => {
-        // TODO
-    })
+    it('should return 500 when there is any error other than validation error', async () => {
+        jest.spyOn(Beach.prototype, 'save')
+            .mockImplementationOnce(() => Promise.reject('fail to create beach'));
+        const newBeach = {
+            lat: -33.792726,
+            lng: 151.289824,
+            name: 'Manly',
+            position: 'E',
+        };
+
+        const response = await global.testRequest
+            .post('/beaches')
+            .set({ 'x-access-token': token })
+            .send(newBeach);
+
+        expect(response.status).toBe(500);
+        expect(response.body).toEqual({
+            code: 500,
+            error: 'Server Error',
+            message: 'Something went wrong!',
+        });
+    });
 
 });
