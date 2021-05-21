@@ -11,6 +11,7 @@ Source code made during course *"Do Zero A Produção: Aprenda A Construir Uma A
 - Typescript
 - Jest
 - MongoDB
+- Docker * Optional
 
 # How To Run
 
