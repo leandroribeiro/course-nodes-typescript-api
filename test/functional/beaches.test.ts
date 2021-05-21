@@ -14,7 +14,7 @@ describe('Beaches funcional tests', () => {
         await Beach.deleteMany({})
         await User.deleteMany({})
         const user = await new User(defaultUser).save();
-        token = AuthService.generateToken(user.toJSON());
+        token = AuthService.generateToken(user.id);
     });
 
     describe('When creating a beach', () => {
@@ -75,8 +75,8 @@ describe('Beaches funcional tests', () => {
         expect(response.status).toBe(500);
         expect(response.body).toEqual({
             code: 500,
-            error: 'Server Error',
-            message: 'Something went wrong!',
+            error: 'Internal Server Error',
+            message: 'Internal Server Error',
         });
     });
 

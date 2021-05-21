@@ -1,10 +1,10 @@
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 import config from 'config';
-import {User} from "@src/models/user";
+import { User } from "@src/models/user";
 
-export interface DecodeUser extends Omit<User, '_id'> {
-    id: string;
+export interface JwtToken {
+    sub: string;
 }
 
 export default class AuthService {
@@ -17,16 +17,14 @@ export default class AuthService {
         return await bcrypt.compare(password, hashedPassword);
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    public static generateToken(payload: object): string {
-        return jwt.sign(payload, config.get('App.auth.key'), {
+    public static generateToken(sub: string): string {
+        return jwt.sign({sub}, config.get('App.auth.key'), {
             expiresIn: config.get('App.auth.tokenExpiresIn'),
         });
     }
 
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    public static decodeToken(token: string): DecodeUser{
-        return jwt.verify(token, config.get('App.auth.key')) as DecodeUser;
+    public static decodeToken(token: string): JwtToken {
+        return jwt.verify(token, config.get('App.auth.key')) as JwtToken;
     }
 
 
